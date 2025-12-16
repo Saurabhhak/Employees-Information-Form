@@ -42,8 +42,7 @@ body {
 }
 
 /* INPUTS + SELECT FIXED */
-.form-input,
-.select-optn {
+.form-input , .select-optn{
   width: 100%;
   max-width: 16rem;
   height: 38px;
@@ -53,18 +52,16 @@ body {
   background-color: #252627;
   color: #bfc2c5;
   font-size: 1rem;
-  padding-right: rem;
+  padding-right: 1rem;
   font-family: "Trebuchet MS";
 }
-/* .select-optn , .otpn{
-  background-color: #828282;
-  color: #001a0f;
-  padding: 2rem;
-  max-width: 20rem;
-  width: 100%;
-  box-sizing: border-box;
-} */
+#sel-optn{
+  background-color: #292929;
+  color: #c8c5c1;
+  border-radius: 2rem;
+}
 /* CORRECT PLACEHOLDER STYLE */
+
 .form-input::placeholder {
   color: #bfc2c5;
 }
@@ -124,16 +121,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: 1px solid #bfc2c5;
   text-align: center;
   font-size: 0.7rem;
-  font-weight: bolder;
   border-radius: 0.2rem;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
-.Del-user {
+.Del-user , .Edit-user , .update-user{
   width: 100%;
 }
 .tbody,
 .tbody-tr td,
-.Del-user {
+.Del-user, .Edit-user, .update-user{
   background-color: #28292b;
   color: #bfc2c5;
   padding: 0.3rem;
@@ -141,13 +137,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: 1px solid #bfc2c5;
   text-align: center;
   font-size: .65rem;
-  font-weight: bold;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 .Del-user:hover {
   color: red;
+   font-size: .80rem;
 }
+ .Edit-user:hover{
+  color: rgb(0, 255, 251);
+     font-size: .80rem;
+ }
+ .update-user:hover{
+  color: greenyellow;
+     font-size: .80rem;
+     font-weight: bolder;
+ }
 
 
 
