@@ -20,7 +20,18 @@ body {
   color: #bfc2c5;
   border: 1px solid #bfc2c5;
 }
-
+.successMsg {
+  background-color: #01d748;;
+  color: #373737;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #c3e6cb;
+  margin-bottom: 10px;
+}
+.highlight{
+  background-color: #01d748;
+  color: #00171a
+}
 #heading {
   font-size: 1.3rem;
   text-align: center;
@@ -42,7 +53,8 @@ body {
 }
 
 /* INPUTS + SELECT FIXED */
-.form-input , .select-optn{
+.form-input,
+.select-optn {
   width: 100%;
   max-width: 16rem;
   height: 38px;
@@ -55,7 +67,7 @@ body {
   padding-right: 1rem;
   font-family: "Trebuchet MS";
 }
-#sel-optn{
+#sel-optn {
   background-color: #292929;
   color: #c8c5c1;
   border-radius: 2rem;
@@ -73,9 +85,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
 
-.Add-Display-btn {
+.btn-section {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   box-sizing: border-box;
 }
 .btn {
@@ -124,42 +136,39 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 0.2rem;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
-.Del-user , .Edit-user , .update-user{
+.Del-user,
+.Edit-user,
+.update-user {
   width: 100%;
 }
 .tbody,
 .tbody-tr td,
-.Del-user, .Edit-user, .update-user{
+.Del-user,
+.Edit-user,
+.update-user {
   background-color: #28292b;
   color: #bfc2c5;
   padding: 0.3rem;
   border-radius: 0.2rem;
   border: 1px solid #bfc2c5;
   text-align: center;
-  font-size: .65rem;
+  font-size: 0.65rem;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 .Del-user:hover {
   color: red;
-   font-size: .80rem;
+  font-size: 0.8rem;
 }
- .Edit-user:hover{
+.Edit-user:hover {
   color: rgb(0, 255, 251);
-     font-size: .80rem;
- }
- .update-user:hover{
+  font-size: 0.8rem;
+}
+.update-user:hover {
   color: greenyellow;
-     font-size: .80rem;
-     font-weight: bolder;
- }
-
-
-
-
-
-
-
+  font-size: 0.8rem;
+  font-weight: bolder;
+}
 
 /* ---------- Responsive Media Query ---------- */
 /* @media (max-width: 768px) {
@@ -206,7 +215,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding: 0 0.8rem;
   }
 
-  .Add-Display-btn {
+  .btn-section {
     flex-direction: column;
     width: 100%;
   }
