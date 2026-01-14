@@ -1,13 +1,23 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import ReactDOM from 'react-dom/client';
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
+import App from './App';
+// import LoginForm from "./Logs";
+// import SignUpForm from "./Signup";
+// import Navbar from './Navbar';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    
     <App />
+    {/* <Navbar/> */}
+    {/* <Logs/>
+    <SignUp/>  */}
+    {/* // signup or login ko nav bar me karna h or navbar comonent bhi banana h  */}
   </React.StrictMode>
 );
 

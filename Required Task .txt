@@ -1,0 +1,34 @@
+Task : login paage me navebar na aye or Indipendent login or singup 
+Login + Signup 
+navebar + home + footer  ✅
+
+
+Requriment of Backend before to learn is clear !
+async - await // Promise Chain / callbackhell ✅
+Fetch API JSON ✅
+
+Task : Setup Backend Node.js or Database Postgres SQL ⏳... Data 07-01-2026,progress learn modules
+React (Frontend) → Node/Express (Backend) → PostgreSQL (Database)⏳ 
+
+
+This Work Given by Supriya ma'am  date 20-12-2025  ⏳
+Task1 : The Name Or salary section is drop down by icon onclick on icon to Descending Or Ascending Order in emptable , icon donoted by ^ arrow up down icon
+with logic not method
+* The Name by sorted Completed  ✅ date 24-12-2025
+* The salary by sorted Completed ✅ date 26-12-2025
+
+29-12-2025
+* Error is that whenever sort any order and edit the table its only edit according display table indexing ✅
+solved: The solution the reason is always give that index so index not uniquce key that why using primary key properties✅
+
+07-01-2026 Task Given by Supriya ma'am 
+step 1: create project section in your form ? 
+step 2: create dashborad btn to onclick so only emptable in username or project view?   
+step 3: dashborad me emp name or project ki table print ho
+
+
+12-01-2026 Task Given by Supriya ma'am✅
+task: Project according card or number or employee count in particular card of project 
+step: Grid the Card according Project✅
+step: Count the employee particular project card✅
+stap: display the dashborad all the card and its results✅

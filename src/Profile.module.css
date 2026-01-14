@@ -1,0 +1,16 @@
+.Profile{
+    background-color: rgb(70, 70, 70);
+    /* border: 1px solid red; */
+    padding: .5rem;
+    text-align: center;
+    border-radius: .3rem;
+    line-height: 1.5rem;
+}
+h2{
+    font-size: .85rem;
+    color: aliceblue;
+}
+h3{
+    font-size: .85rem;
+    color: aliceblue;
+}

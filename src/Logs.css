@@ -1,0 +1,83 @@
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Trebuchet MS";
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  padding-top: 5rem;
+  background: #252627;
+}
+.tagh1 {
+  color: #bfc2c5;
+  margin-bottom: 3rem;
+}
+.form-container {
+  display: flex;
+  align-items: center;
+  /* border: 1px solid #9c9898e4; */
+  /* border-radius: 0.5rem; */
+  padding: 1rem;
+}
+.form-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  border: 1px solid #9c9898e4;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  margin: auto;
+  width: 100%;
+}
+.form-input {
+  width: 100%;
+  max-width: 16rem;
+  height: 38px;
+  padding: 0 1.4rem 0 2rem;
+  border-radius: 0.5rem;
+  border: 0.1px solid #bfc2c5;
+  background-color: #252627;
+  color: #bfc2c5;
+  font-size: 1rem;
+  font-weight: bold;
+  padding-right: 1rem;
+  font-family: "Trebuchet MS";
+}
+.btn-section {
+  display: flex;
+  gap: 0.5rem;
+}
+.form-input::placeholder {
+  color: #bfc2c5;
+}
+.btn {
+  display: flex;
+  min-width: 5rem;
+  cursor: pointer;
+  align-items: center;
+  height: 30px;
+  border-radius: 0.4rem;
+  border: none;
+  font-weight: bold;
+  background: #64efeb;
+  color: #00171a;
+  transition: 0.1s;
+  font-size: 1rem;
+}
+#btn:hover {
+  transform: scale(0.95);
+}
+
+.linkStyle {
+  color: #4344cc;
+  text-decoration: none;
+  /* border: 1px solid red; */
+}
+.linkStyle:hover {
+  color: #0a66c2;
+}
