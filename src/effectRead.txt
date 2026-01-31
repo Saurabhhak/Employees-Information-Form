@@ -1,0 +1,12 @@
+Side effects kya hote hain?
+
+Timer / auto-hide
+
+API call (conditional)
+
+State change ke baad kuch aur karna
+
+Cleanup (clearTimeout, remove listener)
+“I use useEffect only for side effects 
+that depend on state changes, like timers, 
+UI synchronization, or cleanup—not for direct user actions.”

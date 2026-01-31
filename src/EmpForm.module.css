@@ -99,12 +99,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   text-align: center;
 }
-.highlight {
+.EditHighLight {
   border: none;
-  background: none;
-  color: #e6ebef;
-  box-shadow: inset 0 0 8px rgba(234, 246, 255, 0.6);
-
+  background: #262626;
+  color: lab(100% 0.01 -0.01);
+  box-shadow: inset 0 0 0.5rem dodgerblue;
+  font-weight: bolder;
+  font-size: .85rem;
 }
 .btn_section {
   display: flex;
@@ -120,7 +121,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   border-radius: 0.3rem;
   font-weight: bold;
-  color: #e5e5e5;
+  color: #fefefe;
   background: hsl(0, 0%, 21%);
   transition: 0.2s;
   box-shadow: inset 0 0 8px dodgerblue;
@@ -131,7 +132,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .btn_feature:hover {
   transform: scale(0.9);
-  color: #e5e5e5;
   box-shadow: inset 0 0 6px #ffffff;
   background: linear-gradient(135deg, #0d47a1, #1976d2, #42a5f5);
 }
@@ -189,16 +189,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-transform: capitalize;
   box-shadow: inset 0 0 0.2rem rgb(135, 135, 135);
 }
-td.firstname_sort_highlight {
+td.firstname_sort_HighLight {
   box-shadow: inset 0 0 0.4rem dodgerblue;
   background: #5a5a5a;
-  /* padding: 0.6rem; */
+}
+td.salary_sort_HighLight{
+  box-shadow: inset 0 0 0.4rem dodgerblue;
+  background: #5a5a5a;
 }
 
-td.salary_sort_highlight {
-  box-shadow: inset 0 0 0.4rem dodgerblue;
-  background: #5a5a5a;
-}
+
 
 td.tbody_btns {
   display: grid;

@@ -8,25 +8,13 @@ import Feature from "./Feature";
 import Profile from "./Profile";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
-  const [employees, setEmployees] = useState([]);
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<HomeLayout />}>
-          <Route
-            path="/"
-            element={
-              <EmployeeInfoForm
-                employees={employees}
-                setEmployees={setEmployees}
-              />
-            }
-          />
+          <Route path="/" element={<EmployeeInfoForm />} />
           <Route path="/feature" element={<Feature />} />
-          <Route
-            path="/dashboard"
-            element={<Dashboard employees={employees} />}
-          />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignUpForm />} />

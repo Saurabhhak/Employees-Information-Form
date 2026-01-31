@@ -1,8 +1,8 @@
 // All the task are completed at Date 15-12-2025, All the code here
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./EmpForm.module.css";
-
-function EmployeeInfoForm({ employees, setEmployees }) {
+function EmployeeInfoForm() {
+  const [employees, setEmployees] = useState([]);
   const [userinfo, setUserInfo] = useState({
     firstname: "",
     lastname: "",
@@ -12,63 +12,91 @@ function EmployeeInfoForm({ employees, setEmployees }) {
     project: "",
     salary: "",
   });
-  //conditional oprator { &&<></>}
-  // const [employees, setemployees] = useState([]);
-  const [showtable, setShowTable] = useState(false);
+  const [showTable, setShow_Table] = useState(false);
   const [searchresult, setSearchReasult] = useState(false);
   const [editindex, setEditIndex] = useState("");
-  // Edit btn onclick "ADD" btn hide
-  const [addhidebtn, setAddHideBtn] = useState(true);
-  //update btn show onclick to "edit" btn
-  const [updateshowbtn, setUpdateShowBtn] = useState(false);
-  //Display btn onclick to hide "search" btn
-  const [hidesearchbtn, setHideSearchBtn] = useState(true);
-  //Back btn hide only display,search or update btn onclick to view
-  const [hidebackbtn, setHideBackbtn] = useState(false);
-  //Reset btn hide only show when type input box onclcik search btn
-  const [hideresetbtn, setHideResetBtn] = useState(false);
-  //Display btn hide when click edit btn
-  const [hidedisplaybtn, setHideDisplayBtn] = useState(true);
-  // popup successfully message
+  // ---- HIDE BTNS FUNCTIONALITY
+  const obj_Btns = {
+    FORM: "FORM",
+    EDIT: "EDIT",
+    TABLE: "TABLE",
+    SEARCH: "SEARCH",
+  };
+  const [actBtns, setActBtns] = useState(obj_Btns.FORM);
+  const btns_Mode = {
+    [obj_Btns.FORM]: {
+      add: true,
+      update: false,
+      display: true,
+      search: true,
+      back: false,
+    },
+    [obj_Btns.EDIT]: {
+      add: false,
+      update: true,
+      display: false,
+      search: false,
+      back: true,
+    },
+    [obj_Btns.TABLE]: {
+      add: true,
+      update: false,
+      display: false,
+      search: true,
+      back: true,
+    },
+    [obj_Btns.SEARCH]: {
+      add: false,
+      update: false,
+      display: false,
+      search: true,
+      back: true,
+    },
+  };
+  const btns_State = btns_Mode[actBtns];
+  // ----RESET BTN SHOW WHEN INPUT IS NOT EMPTY
+  const [show_ResetBtn, setSHOW_Reset_Btn] = useState(false);
+  // ---- INPUT HIGHLIGHTED WHEN ONCLICK ON EDIT BUTTON
+  const [Input_highlighted, setInput_Highlighted] = useState(false);
+  // ---- POPUP MESSAGE WHEN SUBMIT, DELETE, UPDATE THE DATA
   const [successMsg, setSuccessMsg] = useState(false);
-  // highlight the edit section
-  const [highlight, setHighlight] = useState(false);
-  // sort by name
-  const [ascsorted, setAscSorted] = useState(false);
-  const [descsorted, setDescSorted] = useState(false);
-  // sort by salary
-  const [ascsalary, setAscSalary] = useState(false);
-  const [descsalary, setDescSalary] = useState(false);
+  // ---- SORT BY NAME & SORT BY SALARY
   const [hidesortIcon, setHideSortIcon] = useState(false);
+  const [sortType, setSortType] = useState(null);
+  const [ShowSortedTable, setShowSortedTable] = useState(false);
+  // ---------------------------- ONCHANGE_EVENT_FUNCTION
   function handleChangeEvent(e) {
     const { name, value } = e.target;
     setUserInfo((values) => ({ ...values, [name]: value }));
-    // if (!userinfo.length > 0) {
-    //   setHideResetBtn(true);
-    //   return;
-    // }
-    // --> If you read Solve it ?? input box is clear by press back key on laptop, check the leangth user.info===0 then reset btn hide
-    // if (userinfo.length===0) {
-    //   setHideResetBtn(false);
-    //   return;
-    // }
-    //  input box is clear by keyboard , check the leangth user.info===0 then reset btn hide
     if (!(value.length === 0)) {
-      setHideResetBtn(true);
+      setSHOW_Reset_Btn(true);
     } else {
-      setHideResetBtn(false);
+      setSHOW_Reset_Btn(false);
     }
   }
+  //--------- ResetFrom Root function
+  const resetFrom = () => {
+    setUserInfo({
+      firstname: "",
+      lastname: "",
+      dob: "",
+      country: "",
+      mobile: "",
+      project: "",
+      salary: "",
+    });
+  };
   //* --------------------------------< ADD userInformission To state of useState >--------
-  function handleBtnAdd() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (
-      userinfo.firstname === "" ||
-      userinfo.lastname === "" ||
-      userinfo.dob === "" ||
-      userinfo.country === "" ||
-      userinfo.mobile === "" ||
-      userinfo.project === "" ||
-      userinfo.salary === ""
+      !userinfo.firstname ||
+      !userinfo.lastname ||
+      !userinfo.dob ||
+      !userinfo.country ||
+      !userinfo.mobile ||
+      !userinfo.project ||
+      !userinfo.salary
     ) {
       alert("Please fill the all detalis");
       return;
@@ -94,105 +122,66 @@ function EmployeeInfoForm({ employees, setEmployees }) {
       alert("data alredy Exists please try diffence number");
       return;
     }
-    setEmployees((employees) => [...employees, userinfo]); // ye prev ek spread method h jsme old value store hoti or new value userinfo se get hoti h
-    // alert the message if infomation add successfully
-    const checkadduser = [...employees];
-    if (!(employees > checkadduser)) {
-      // alert(`'${userinfo.firstname}' '${userinfo.lastname}' Your data Add successfully As primary Number ${userinfo.mobile}`);
-      setSuccessMsg(`'${userinfo.firstname}' added successfully!`);
-      setTimeout(() => {
-        setSuccessMsg("");
-      }, 2000);
-      setUserInfo({
-        firstname: "",
-        lastname: "",
-        dob: "",
-        country: "",
-        mobile: "",
-        project: "",
-        salary: "",
-      });
-      setHideResetBtn(false); // after add the details reset btn hide
-      setHighlight(false);
-      // setHideSortIcon(false);
-      console.log("userinfo:", userinfo);
-      return;
-    }
-  }
-  const tablerow = employees.map((item, index) => (
-    <tr key={index} className={styles.tbody_tr}>
-      <td>{item.firstname}</td>
-      <td>{item.lastname}</td>
-      <td>{item.dob}</td>
-      <td>{item.country}</td>
-      <td>{item.mobile}</td>
-      <td>{item.project}</td>
-      <td>{item.salary}</td>
-      <td className={styles.tbody_btns}>
-        <button
-          type="button"
-          className={styles.Del_user}
-          onClick={() => {
-            handleDel(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-trash" />
-        </button>
-        <button
-          type="button"
-          className={styles.Edit_user}
-          onClick={() => {
-            handleEdit(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-edit" />
-        </button>
-      </td>
-    </tr>
-  ));
+    const res = await fetch("http://localhost:5000/api/empform", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userinfo),
+    });
+    const newEmp = await res.json();
+    setEmployees(prev => [...prev, newEmp]);
+    handleDisplay();
+    setSuccessMsg(`'${userinfo.firstname}' added successfully!`);
+    setActBtns(obj_Btns.FORM);
+    setSHOW_Reset_Btn(false); // after add the details reset btn hide
+    setInput_Highlighted(false);
+    setHideSortIcon(false);
+    resetFrom();
+    console.log(employees);
+  };
+  useEffect(() => {
+    if (!successMsg) return;
+    const timer = setTimeout(() => {
+      setSuccessMsg("");
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, [successMsg]);
   //* -------------------------------------< DisplayTable Section >------------------------------------------
-  function handleDisplay() {
-    if (employees.length > 0) {
+  const handleDisplay = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/empform"); 
+      const data = await res.json();
+      if (data.length === 0) {
+        alert("No data to display");
+        return;
+      }
+      setEmployees(data);
+      setActBtns(obj_Btns.TABLE);
       setSearchReasult(false);
-      setShowTable(true);
-      setHideSearchBtn(false);
-      setHideBackbtn(true);
-      setAscSorted(false);
-      setAscSalary(false);
-      setDescSorted(false);
-      setDescSalary(false);
+      setShow_Table(true);
       setHideSortIcon(true);
-    } else {
-      alert("No data to Display please add infomation");
-      setShowTable(false);
-      return;
+      setShowSortedTable(false);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to load data");
     }
-  }
+  };
 
   //* -------------------------------------< DelTableRow Section >------------------------------------------
   function handleDel(mobile) {
     const userDel = employees.find(
       //>> find()- The value of the first element that passes a test
-      (emp) => emp.mobile === mobile
+      (emp) => emp.mobile === mobile,
     ); //>> find() hamesha array ka matching element (object) return karta hai, index nahi.
     if (
       window.confirm(
-        `Want to delete employee ‟${userDel.mobile}” Id, name of ‟${userDel.firstname}”`
+        `Want to delete employee ‟${userDel.mobile}” Id, name of ‟${userDel.firstname}”`,
       )
     ) {
       setEmployees((prev) => prev.filter((emp) => emp.mobile !== mobile));
       setSuccessMsg(`'${userDel.mobile}'s data  deleted  successfully!`);
-      setTimeout(() => {
-        setSuccessMsg("");
-      }, 3000);
-      setUserInfo({
-        firstname: "",
-        lastname: "",
-        dob: "",
-        country: "",
-        mobile: "",
-        salary: "",
-      });
+      resetFrom();
       // console.log(employees.length);
       return;
     }
@@ -203,18 +192,12 @@ function EmployeeInfoForm({ employees, setEmployees }) {
     const editEmpIndex = employees.findIndex((emp) => emp.mobile === mobile);
     setUserInfo(employees[editEmpIndex]); // setuserinfo me employees ka find index employees[empIndex] data put kardiya
     setEditIndex(editEmpIndex); // or usse save kardiya editindex se state me
-    // if Onclick edit btn then show the update btn and hide Add btn
-    setUpdateShowBtn(true);
-    setAddHideBtn(false);
-    setHideResetBtn(true);
-    setHideSearchBtn(false);
-    setHideDisplayBtn(false);
-    // Highlight the edit section
-    // const highlight = employees[index].firstname;
-    setHighlight(true);
+    setSHOW_Reset_Btn(true);
+    setActBtns(obj_Btns.EDIT);
+    setInput_Highlighted(true);
   }
   //* -------------------------------------< Update EditTabeRow Section  >-----------------------
-  function handleUpdate() {
+  const handleUpdate= ()=> {
     // after Update table not show and resetbtn active
     if (
       userinfo.firstname === "" ||
@@ -245,54 +228,24 @@ function EmployeeInfoForm({ employees, setEmployees }) {
       return;
     }
     //--- Update logic -------
-    const updateid = employees[editindex].mobile;
-    employees[editindex] = userinfo; // replace row  editindex = userinfo
+    const updated = [...employees];
+    updated[editindex] = userinfo;
+    setEmployees(updated); // replace row  editindex = userinfo
     //--------------------------------------------------------------------
     setEmployees(employees); // Save updated list
     setEditIndex(null); // reset edit
-    setUpdateShowBtn(false);
-    setHideResetBtn(false);
-    setHideBackbtn(true);
-    setShowTable(true);
-    setAscSorted(false);
-    setAscSalary(false);
-    setDescSorted(false);
-    setDescSalary(false);
-    setUserInfo({
-      // Clear input fields
-      firstname: "",
-      lastname: "",
-      dob: "",
-      country: "",
-      mobile: "",
-      salary: "",
-    });
-
-    // highlisht updatemSuccessMsg
-    setSuccessMsg(`Your '${updateid}' Id Updated successfully!`);
+    setSHOW_Reset_Btn(false);
+    setShow_Table(true);
+    setActBtns(obj_Btns.EDIT);
+    resetFrom();
+    setSuccessMsg(`Your '${updated}' Id Updated successfully!`);
     setTimeout(() => {
       setSuccessMsg("");
     }, 3000);
-    setUserInfo({
-      firstname: "",
-      lastname: "",
-      dob: "",
-      country: "",
-      mobile: "",
-      project: "",
-      salary: "",
-    });
-    // highlisht property updateed in table
-    alert("Edit information updated successfully");
     return;
   }
   //* --------------------------------------< Search >----------------------------------
-  // Q. search the firstname of first input area from employees and print the firstname in table
-  // step1: search name in [input text area in first name] is check employees table == [first name]
-  // step2: fist add the employee table then link the search btn to [input area]
-  // step3: type search the name is match that table fistname
-  // step4: if matched then print the matches name only in table
-  function handleSearch() {
+  const handleSearch = () => {
     if (!(employees.length > 0)) {
       // not list is less 0
       alert("Employee Data Table is empty, please add employee data");
@@ -304,341 +257,92 @@ function EmployeeInfoForm({ employees, setEmployees }) {
     }
     const match = employees.filter(
       (
-        item // Enter name to search the name its case-in-sensitive if match firstname = employeesfirst filter return ture result in table
+        item, // Enter name to search the name its case-in-sensitive if match firstname = employeesfirst filter return ture result in table
       ) =>
         item.firstname.toLowerCase().charAt(0) ===
-        userinfo.firstname.toLowerCase().charAt(0)
+        userinfo.firstname.toLowerCase().charAt(0),
     );
     console.log(match);
     if (match.length > 0) {
       alert(`Employee '${userinfo.firstname}' found successfully.`);
-      setAddHideBtn(false);
       setSearchReasult(true);
-      setHideBackbtn(true);
-      setHideResetBtn(true);
-      setHighlight(false);
+      setActBtns(obj_Btns.SEARCH);
+      setSHOW_Reset_Btn(true);
       return;
     } else {
       alert(`Employee '${userinfo.firstname}'  not found in Database`);
     }
-  }
-  const match = employees
-    .filter(
-      (item) =>
-        item.firstname.toLowerCase().charAt(0) ===
-        userinfo.firstname.toLowerCase().charAt(0)
-    )
-    .map((item, index) => (
-      <tr key={index} className={styles.tbody_tr}>
-        <td>{item.firstname}</td>
-        <td>{item.lastname}</td>
-        <td>{item.dob}</td>
-        <td>{item.country}</td>
-        <td>{item.mobile}</td>
-        <td>{item.project}</td>
-        <td>{item.salary}</td>
-        <div className="tbody-icons-btn">
-          <button
-            type="button"
-            className={styles.Del_user}
-            onClick={() => {
-              handleDel(item.mobile);
-            }}
-          >
-            <i className="fa-solid fa-close" />
-          </button>
-          <button
-            type="button"
-            className={styles.Edit_user}
-            onClick={() => {
-              handleEdit(item.mobile);
-            }}
-          >
-            <i className="fa-solid fa-edit" />
-          </button>
-        </div>
-      </tr>
-    ));
+  };
+  useEffect(() => {
+    if (searchresult) {
+      setShow_Table(false);
+      setInput_Highlighted(false);
+    }
+  }, [searchresult]);
   // * ----------------------------------------< Back >--------------------------------
   function handleBack() {
-    if (!setShowTable(true) && !setSearchReasult(true)) {
-      setShowTable(false);
-      setSearchReasult(false);
-      setHideSearchBtn(true);
-      setAddHideBtn(true);
-      setUpdateShowBtn(false);
-      setHideBackbtn(false);
-      setHideResetBtn(false);
-      setHideDisplayBtn(true);
-      setAscSorted(false);
-      setDescSorted(false);
-      setDescSalary(false);
-      setAscSalary(false);
-      setHideSortIcon(false);
-      setUserInfo({
-        // Clear input fields
-        firstname: "",
-        lastname: "",
-        dob: "",
-        country: "",
-        mobile: "",
-        project: "",
-        salary: "",
-      });
-      setHighlight(false);
-      return;
-    }
-  }
-  // * ----------------------------------------< reset >--------------------------------
-  function handleReset() {
-    setUserInfo({
-      // Clear input fields
-      firstname: "",
-      lastname: "",
-      dob: "",
-      country: "",
-      mobile: "",
-      project: "",
-      salary: "",
-    });
-    setHideResetBtn(false);
-    setHighlight(false);
+    setActBtns(obj_Btns.FORM);
+    setShow_Table(false);
+    setSearchReasult(false);
+    setHideSortIcon(false);
+    setShowSortedTable(false);
+    setSHOW_Reset_Btn(false);
+    setInput_Highlighted(false);
+    resetFrom();
   }
 
-  //* -----------------------------------< sorting Ascending  Order Name >---------------------------
-  function handleAscName() {
-    if (!setShowTable(true)) {
-      setAscSorted(true);
-      setShowTable(false);
-      setSearchReasult(false);
-      setDescSorted(false);
-      setAscSalary(false);
-      setDescSalary(false);
-      return;
-    }
+  // * ----------------------------------------< reset >--------------------------------
+  function handleReset() {
+    resetFrom();
+    setSHOW_Reset_Btn(false);
+    setInput_Highlighted(false);
   }
-  const AscendingName = [...employees];
-  for (let i = 0; i < AscendingName.length; i++) {
-    for (let j = 0; j < AscendingName.length - 1; j++) {
-      if (
-        AscendingName[j].firstname.localeCompare(
-          AscendingName[j + 1].firstname
-        ) > 0
-      ) {
-        let temp = 0;
-        temp = AscendingName[j];
-        AscendingName[j] = AscendingName[j + 1];
-        AscendingName[j + 1] = temp;
-      }
-    }
+  //* ----> Sorting Order <----
+  //here we get parameter type from onclick to get data in Ordertype
+  function handleSort(OrderType) {
+    setSortType(OrderType); //here we set in the state of type
+    setShowSortedTable(true);
   }
-  const AscendingName1 = AscendingName.map((item, index) => (
-    <tr key={index} className={styles.tbody_tr}>
-      <td className={styles.firstname_sort_highlight}>{item.firstname}</td>
-      <td>{item.lastname}</td>
-      <td>{item.dob}</td>
-      <td>{item.country}</td>
-      <td>{item.mobile}</td>
-      <td>{item.project}</td>
-      <td>{item.salary}</td>
-      <td className={styles.tbody_btns}>
-        <button
-          type="button"
-          className={styles.Del_user}
-          onClick={() => {
-            handleDel(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-trash" />
-        </button>
-        <button
-          type="button"
-          className={styles.Edit_user}
-          onClick={() => {
-            handleEdit(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-edit" />
-        </button>
-      </td>
-    </tr>
-  ));
-  //* -------------------------------------< sorting Descending Order Name  >-------------------------
-  function handleDescName() {
-    if (!setShowTable(true)) {
-      setDescSorted(true);
-      setAscSorted(false);
-      setAscSalary(false);
-      setDescSalary(false);
-      setShowTable(false);
-      setSearchReasult(false);
-      return;
-    }
+  let preSortEmp = [...employees];
+  if (sortType) {
+    preSortEmp.filter((emp) => emp.firstname === sortType);
   }
-  const DescendingName = [...employees];
-  for (let i = 0; i < DescendingName.length; i++) {
-    for (let j = 0; j < DescendingName.length - 1; j++) {
-      if (
-        DescendingName[j].firstname.localeCompare(
-          DescendingName[j + 1].firstname
-        ) < 0
-      ) {
-        let temp = 0;
-        temp = DescendingName[j];
-        DescendingName[j] = DescendingName[j + 1];
-        DescendingName[j + 1] = temp;
-      }
-    }
+  // ---- Sorting Ascending Order By Name
+  if (sortType === "Name_Asc") {
+    preSortEmp.sort((a, b) =>
+      (a.firstname || "").localeCompare(b.firstname || ""),
+    );
   }
-  const DescendingName1 = DescendingName.map((item, index) => (
-    <tr key={index} className={styles.tbody_tr}>
-      <td className={styles.firstname_sort_highlight}>{item.firstname}</td>
-      <td>{item.lastname}</td>
-      <td>{item.dob}</td>
-      <td>{item.country}</td>
-      <td>{item.mobile}</td>
-      <td>{item.project}</td>
-      <td>{item.salary}</td>
-      <td className={styles.tbody_btns}>
-        <button
-          type="button"
-          className={styles.Del_user}
-          onClick={() => {
-            handleDel(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-trash" />
-        </button>
-        <button
-          type="button"
-          className={styles.Edit_user}
-          onClick={() => {
-            handleEdit(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-edit" />
-        </button>
-      </td>
-    </tr>
-  ));
-  // * ---------------------------------------< sorting Ascending Order salary >---------------------------
-  function handleAscSalary() {
-    if (!setShowTable(true)) {
-      setAscSalary(true);
-      setDescSalary(false);
-      setAscSorted(false);
-      setDescSorted(false);
-      setShowTable(false);
-      setSearchReasult(false);
-      return;
-    }
+  // ---- Sorting Descending Order By Name
+  if (sortType === "Name_Desc") {
+    preSortEmp.sort((a, b) =>
+      (b.firstname || "").localeCompare(a.firstname || ""),
+    );
   }
-  const acesalarysort = [...employees];
-  for (let i = 0; i < acesalarysort.length; i++) {
-    for (let j = 0; j < acesalarysort.length - 1; j++) {
-      if (acesalarysort[j].salary > acesalarysort[j + 1].salary) {
-        let temp = 0;
-        temp = acesalarysort[j];
-        acesalarysort[j] = acesalarysort[j + 1];
-        acesalarysort[j + 1] = temp;
-      }
-    }
+  //  ----Sorting Ascending Order By Salary
+  if (sortType === "Salary_Asc") {
+    preSortEmp.sort((a, b) => a.salary - b.salary);
   }
-  const acesalarysort1 = acesalarysort.map((item, index) => (
-    <tr key={index} className={styles.tbody_tr}>
-      <td>{item.firstname}</td>
-      <td>{item.lastname}</td>
-      <td>{item.dob}</td>
-      <td>{item.country}</td>
-      <td>{item.mobile}</td>
-      <td>{item.project}</td>
-      <td className={styles.salary_sort_highlight}>{item.salary}</td>
-      <td className={styles.tbody_btns}>
-        <button
-          type="button"
-          className={styles.Del_user}
-          onClick={() => {
-            handleDel(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-trash" />
-        </button>
-        <button
-          type="button"
-          className={styles.Edit_user}
-          onClick={() => {
-            handleEdit(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-edit" />
-        </button>
-      </td>
-    </tr>
-  ));
-  //* --------------------------------------< sorting Descending Order salary >-------------------------------
-  function handleDescSalary() {
-    if (!setShowTable(true)) {
-      setDescSalary(true);
-      setShowTable(false);
-      setAscSalary(false);
-      setAscSorted(false);
-      setDescSorted(false);
-      setSearchReasult(false);
-      return;
-    }
+  // ---- Sorting Descending Order By Salary
+  if (sortType === "Salary_Desc") {
+    preSortEmp.sort((a, b) => b.salary - a.salary);
   }
-  const descsalarysort = [...employees];
-  for (let i = 0; i < descsalarysort.length; i++) {
-    for (let j = 0; j < descsalarysort.length - 1; j++) {
-      if (descsalarysort[j].salary < descsalarysort[j + 1].salary) {
-        let temp = 0;
-        temp = descsalarysort[j];
-        descsalarysort[j] = descsalarysort[j + 1];
-        descsalarysort[j + 1] = temp;
-      }
-    }
-  }
-  const descsalarysort1 = descsalarysort.map((item, index) => (
-    <tr key={index} className={styles.tbody_tr}>
-      <td>{item.firstname}</td>
-      <td>{item.lastname}</td>
-      <td>{item.dob}</td>
-      <td>{item.country}</td>
-      <td>{item.mobile}</td>
-      <td>{item.project}</td>
-      <td className={styles.salary_sort_highlight}>{item.salary}</td>
-      <td className={styles.tbody_btns}>
-        <button
-          type="button"
-          className={styles.Del_user}
-          onClick={() => {
-            handleDel(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-trash" />
-        </button>
-        <button
-          type="button"
-          className={styles.Edit_user}
-          onClick={() => {
-            handleEdit(item.mobile);
-          }}
-        >
-          <i className="fa-solid fa-edit" />
-        </button>
-      </td>
-    </tr>
-  ));
+  useEffect(() => {
+    if (ShowSortedTable) setShow_Table(false);
+  }, [ShowSortedTable]);
   return (
     <>
-      {/* <div className= {styles.="highlight">
-          {employees.editemp}
-        </div> */}
+      {" "}
       <div>
         {successMsg && <div className={styles.successMsg}>{successMsg}</div>}
       </div>
       <div className={styles.Form_Container}>
-        <form id="form-section" className={styles.form_section}>
+        <form
+          id="form-section"
+          className={styles.form_section}
+          action="#"
+          onSubmit={handleSubmit}
+        >
           <div className={styles.input_container}>
             <h1 id="heading" className={styles.heading}>
               Employee Details
@@ -646,7 +350,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
             {/* <h2>A simple React-based form application that stores user details in a state array and displays them in a dynamic table.</h2> */}
             <input
               className={`${styles.form_input} ${
-                highlight ? styles.highlight : ""
+                Input_highlighted ? styles.Input_highlighted : ""
               }`}
               type="text"
               name="firstname"
@@ -656,7 +360,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
             />
             <input
               className={`${styles.form_input} ${
-                highlight ? styles.highlight : ""
+                Input_highlighted ? styles.Input_highlighted : ""
               }`}
               type="text"
               name="lastname"
@@ -666,7 +370,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
             />
             <input
               className={`${styles.form_input} ${
-                highlight ? styles.highlight : ""
+                Input_highlighted ? styles.Input_highlighted : ""
               }`}
               type="date"
               name="dob"
@@ -675,7 +379,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
             />
             <select
               className={`${styles.select_optn} ${
-                highlight ? styles.highlight : ""
+                Input_highlighted ? styles.Input_highlighted : ""
               }`}
               type="select"
               name="country"
@@ -724,7 +428,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
             </select>
             <input
               className={`${styles.form_input} ${
-                highlight ? styles.highlight : ""
+                Input_highlighted ? styles.Input_highlighted : ""
               }`}
               type="number"
               name="mobile"
@@ -734,7 +438,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
             />
             <select
               className={`${styles.select_optn} ${
-                highlight ? styles.highlight : ""
+                Input_highlighted ? styles.Input_highlighted : ""
               }`}
               type="select"
               name="project"
@@ -762,7 +466,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
             </select>
             <input
               className={`${styles.form_input} ${
-                highlight ? styles.highlight : ""
+                Input_highlighted ? styles.Input_highlighted : ""
               }`}
               type="number"
               name="salary"
@@ -770,10 +474,8 @@ function EmployeeInfoForm({ employees, setEmployees }) {
               onChange={handleChangeEvent}
               placeholder="Enter salary"
             />
-            {/* <input type="text" value={searchitem} onChange={e => setSearchItem(e.target.value)} placeholder="seach the name "/> */}
-            {/* button click per data store karna h state me but display nhi karna */}
             <div id="btn-section" className={styles.btn_section}>
-              {updateshowbtn && (
+              {btns_State.update && (
                 <button
                   className={styles.btn_feature}
                   type="button"
@@ -782,25 +484,17 @@ function EmployeeInfoForm({ employees, setEmployees }) {
                   Update
                 </button>
               )}
-              {addhidebtn && (
-                <button
-                  className={styles.btn_feature}
-                  type="button"
-                  onClick={handleBtnAdd}
-                >
-                  Add
-                </button>
+              {btns_State.add && (
+                <input id="btn" className={styles.btn_feature} type="submit" />
               )}
-
-              {hideresetbtn && (
+              {show_ResetBtn && (
                 <input
                   type="reset"
                   className={styles.btn_feature}
                   onClick={handleReset}
                 />
               )}
-              {/* Display btn onclick show details table of HTML*/}
-              {hidedisplaybtn && (
+              {btns_State.display && (
                 <button
                   className={styles.btn_feature}
                   type="button"
@@ -809,7 +503,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
                   Display
                 </button>
               )}
-              {hidesearchbtn && (
+              {btns_State.search && (
                 <button
                   className={styles.btn_feature}
                   type="button"
@@ -818,7 +512,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
                   Search
                 </button>
               )}
-              {hidebackbtn && (
+              {btns_State.back && (
                 <button
                   className={styles.btn_feature}
                   type="button"
@@ -831,11 +525,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
           </div>
         </form>
       </div>
-
-      {/* here create the logic or method to pass Display funtion to show table */}
-      {/* Search item result */}
-      {/* React me && ka matlab hota hai: “Sab condition true ho tabhi UI dikhao” */}
-      {/* {sorted && } */}
+      {/* CONDITIONAL OPERATOR { && <> </>}  */}
       {employees.length > 0 && hidesortIcon && (
         <div className={styles.sort_icon_grid_box}>
           <div className={styles.sort_icon_name}>
@@ -844,7 +534,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
               type="button"
               className={styles.shotOrder}
               onClick={() => {
-                handleAscName();
+                handleSort("Name_Asc");
               }}
             >
               <i className="fa-solid fa-chevron-up" />
@@ -853,7 +543,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
               type="button"
               className={styles.shotOrder}
               onClick={() => {
-                handleDescName();
+                handleSort("Name_Desc");
               }}
             >
               <i className="fa-solid fa-chevron-down" />
@@ -865,7 +555,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
               type="button"
               className={styles.shotOrder}
               onClick={() => {
-                handleAscSalary();
+                handleSort("Salary_Asc");
               }}
             >
               <i className="fa-solid fa-chevron-up" />
@@ -874,7 +564,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
               type="button"
               className={styles.shotOrder}
               onClick={() => {
-                handleDescSalary();
+                handleSort("Salary_Desc");
               }}
             >
               <i className="fa-solid fa-chevron-down" />
@@ -882,7 +572,7 @@ function EmployeeInfoForm({ employees, setEmployees }) {
           </div>
         </div>
       )}
-      {employees.length > 0 && showtable && (
+      {employees.length > 0 && showTable && (
         <div className={styles.display_table} id="display-info">
           <table className={styles.table_list} id="table-list">
             <thead className={styles.thead}>
@@ -897,7 +587,94 @@ function EmployeeInfoForm({ employees, setEmployees }) {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody className={styles.tbody}>{tablerow}</tbody>
+            <tbody className={styles.tbody}>
+              {employees.map((item, index) => (
+                <tr key={index} className={styles.tbody_tr}>
+                  <td>{item.firstname}</td>
+                  <td>{item.lastname}</td>
+                  <td>{item.dob?.split("T")[0]}</td>
+                  <td>{item.country}</td>
+                  <td>{item.mobile}</td>
+                  <td>{item.project}</td>
+                  <td>{item.salary}</td>
+                  <td className={styles.tbody_btns}>
+                    <button
+                      type="button"
+                      className={styles.Del_user}
+                      onClick={() => {
+                        handleDel(item.mobile);
+                      }}
+                    >
+                      <i className="fa-solid fa-trash" />
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.Edit_user}
+                      onClick={() => {
+                        handleEdit(item.mobile);
+                      }}
+                    >
+                      <i className="fa-solid fa-edit" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {employees.length > 0 && ShowSortedTable && (
+        <div className={styles.display_table} id="display-info">
+          <table className={styles.table_list} id="table-list">
+            <thead className={styles.thead}>
+              <tr className={styles.thead_tr}>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>DOB</th>
+                <th>Country</th>
+                <th>mobile</th>
+                <th>project</th>
+                <th>Salary</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody className={styles.tbody}>
+              {preSortEmp.map((item, index) => (
+                <tr key={index} className={styles.tbody_tr}>
+                  <td className={styles.firstname_sort_HighLight}>
+                    {item.firstname}
+                  </td>
+                  <td>{item.lastname}</td>
+                  <td>{item.dob?.split("T")[0]}</td>
+                  <td>{item.country}</td>
+                  <td>{item.mobile}</td>
+                  <td>{item.project}</td>
+                  <td className={styles.salary_sort_HighLight}>
+                    {item.salary}
+                  </td>
+                  <td className={styles.tbody_btns}>
+                    <button
+                      type="button"
+                      className={styles.Del_user}
+                      onClick={() => {
+                        handleDel(item.mobile);
+                      }}
+                    >
+                      <i className="fa-solid fa-trash" />
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.Edit_user}
+                      onClick={() => {
+                        handleEdit(item.mobile);
+                      }}
+                    >
+                      <i className="fa-solid fa-edit" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       )}
@@ -916,83 +693,45 @@ function EmployeeInfoForm({ employees, setEmployees }) {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody className={styles.tbody}>{match}</tbody>
-          </table>
-        </div>
-      )}
-      {employees.length > 0 && ascsorted && (
-        <div className={styles.display_table} id="display-info">
-          <table className={styles.table_list} id="table-list">
-            <thead className={styles.thead}>
-              <tr className={styles.thead_tr}>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>DOB</th>
-                <th>Country</th>
-                <th>mobile</th>
-                <th>project</th>
-                <th>Salary</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tbody}>{AscendingName1}</tbody>
-          </table>
-        </div>
-      )}
-      {employees.length > 0 && descsorted && (
-        <div className={styles.display_table} id="display-info">
-          <table className={styles.table_list} id="table-list">
-            <thead className={styles.thead}>
-              <tr className={styles.thead_tr}>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>DOB</th>
-                <th>Country</th>
-                <th>mobile</th>
-                <th>project</th>
-                <th>Salary</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tbody}>{DescendingName1}</tbody>
-          </table>
-        </div>
-      )}
-      {employees.length > 0 && ascsalary && (
-        <div className={styles.display_table} id="display-info">
-          <table className={styles.table_list} id="table-list">
-            <thead className={styles.thead}>
-              <tr className={styles.thead_tr}>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>DOB</th>
-                <th>Country</th>
-                <th>mobile</th>
-                <th>project</th>
-                <th>Salary</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tbody}>{acesalarysort1}</tbody>
-          </table>
-        </div>
-      )}
-      {employees.length > 0 && descsalary && (
-        <div className={styles.display_table} id="display-info">
-          <table className={styles.table_list} id="table-list">
-            <thead className={styles.thead}>
-              <tr className={styles.thead_tr}>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>DOB</th>
-                <th>Country</th>
-                <th>mobile</th>
-                <th>project</th>
-                <th>Salary</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tbody}>{descsalarysort1}</tbody>
+            <tbody className={styles.tbody}>
+              {employees
+                .filter(
+                  (item) =>
+                    item.firstname.toLowerCase().charAt(0) ===
+                    userinfo.firstname.toLowerCase().charAt(0),
+                )
+                .map((item, index) => (
+                  <tr key={index} className={styles.tbody_tr}>
+                    <td>{item.firstname}</td>
+                    <td>{item.lastname}</td>
+                    <td>{item.dob?.split("T")[0]}</td>
+                    <td>{item.country}</td>
+                    <td>{item.mobile}</td>
+                    <td>{item.project}</td>
+                    <td>{item.salary}</td>
+                    <td className={styles.tbody_btns}>
+                      <button
+                        type="button"
+                        className={styles.Del_user}
+                        onClick={() => {
+                          handleDel(item.mobile);
+                        }}
+                      >
+                        <i className="fa-solid fa-trash" />
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.Edit_user}
+                        onClick={() => {
+                          handleEdit(item.mobile);
+                        }}
+                      >
+                        <i className="fa-solid fa-edit" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
           </table>
         </div>
       )}

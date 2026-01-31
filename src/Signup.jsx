@@ -1,7 +1,10 @@
-import { useState } from "react";
+import styles from "./EmpForm.module.css";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Signup.css";
 function SignUpForm() {
+  const [successMsg, setSuccessMsg] = useState("");
+  // const [userlist, setUserList] = useState([]);
   const [userinfo, setUserInfo] = useState({
     firstname: "",
     lastname: "",
@@ -12,11 +15,31 @@ function SignUpForm() {
   function handleChanageEvent(e) {
     const { name, value } = e.target;
     setUserInfo((values) => ({ ...values, [name]: value }));
-    return;
   }
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(userinfo.firstname);
+    if (
+      !userinfo.firstname ||
+      !userinfo.lastname ||
+      !userinfo.age ||
+      !userinfo.email ||
+      !userinfo.password
+    ) {
+      alert("Please fill all details");
+      return;
+    }
+    await fetch("http://localhost:5000/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userinfo),
+    });
+    // if (!res.ok) {
+    //   alert("Signup failed");
+    //   return;
+    // }
+    setSuccessMsg(`${userinfo.firstname} added successfully!`);
     setUserInfo({
       firstname: "",
       lastname: "",
@@ -24,9 +47,19 @@ function SignUpForm() {
       email: "",
       password: "",
     });
-  }
+  };
+  useEffect(() => {
+    if (!successMsg) return;
+    const timer = setTimeout(() => {
+      setSuccessMsg("");
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [successMsg]);
   return (
     <>
+      <div>
+        {successMsg && <div className={styles.successMsg}>{successMsg}</div>}
+      </div>
       <div className="form-container">
         <form action="#" onSubmit={handleSubmit} className="form-section">
           <h1 className="tagh1">Create Your Account</h1>

@@ -1,0 +1,7 @@
+Learn in THIS order 👇
+
+Node.js basic server
+Express framework
+Routes (GET / POST)
+Database connection (PostgreSQL)
+Insert form data into DB
